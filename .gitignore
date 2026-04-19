@@ -1,0 +1,16 @@
+# Monorepo — Java (Maven), Node (Angular), IDE, OS
+
+**/target/
+**/node_modules/
+**/dist/
+**/build/
+**/.angular/cache/
+
+**/.idea/
+*.iml
+*.ipr
+*.iws
+
+.DS_Store
+Thumbs.db
+*.log

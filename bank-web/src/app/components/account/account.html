@@ -1,0 +1,42 @@
+<div class="accounts-dashboard">
+  <div class="header">
+    <h2>Account Overview</h2>
+    <p>Manage and monitor all your bank accounts in one place.</p>
+  </div>
+
+  @if (accounts$ | async; as accounts) {
+    <div class="accounts-grid">
+      @for (account of accounts; track account.accountNumber) {
+        <div class="account-card">
+          <div class="card-header">
+            <h3 class="owner-name">{{ account.customerName }}</h3>
+            <span [class]="accountBadgeClass(account.status)">{{ account.status }}</span>
+          </div>
+          <div class="card-body">
+            <p class="account-number">
+              <span class="label">Account No.</span>
+              <span class="value">{{ account.accountNumber }}</span>
+            </p>
+            <div class="balance-container">
+              <span class="currency-symbol">₹</span>
+              <span class="balance-amount">{{ account.balance | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="action-btn">View Details</button>
+            <button class="action-btn secondary">Transfer</button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <p>No accounts found.</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your accounts...</p>
+    </div>
+  }
+</div>
