@@ -1,5 +1,7 @@
-import { Component, inject } from '@angular/core';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
 import { AccountService } from '../../services/account-service';
 
 const ACCOUNT_STATUS_BADGE_CLASSES: Record<string, string> = {
@@ -13,7 +15,7 @@ const BADGE_BASE = 'inline-flex items-center rounded-full px-3 py-0.5 text-xs fo
 
 @Component({
   selector: 'app-account',
-  imports: [AsyncPipe, DecimalPipe],
+  imports: [AsyncPipe, DecimalPipe, RouterLink],
   templateUrl: './account.html',
   styleUrl: './account.css',
 })

@@ -1,0 +1,39 @@
+<div class="customers-page">
+  <div class="page-header">
+    <h2>Customers</h2>
+    <p>Directory from <code>GET /api/customers</code></p>
+  </div>
+
+  @if (customers$ | async; as customers) {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Registered</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of customers; track c.id) {
+            <tr>
+              <td>{{ c.firstName }} {{ c.lastName }}</td>
+              <td>{{ c.email }}</td>
+              <td>{{ c.phone }}</td>
+              <td>{{ c.city }}, {{ c.state }}</td>
+              <td>{{ formatDate(c.registrationDate) }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty">No customers returned.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="loading">Loading customers…</p>
+  }
+</div>

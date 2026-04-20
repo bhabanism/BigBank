@@ -1,0 +1,65 @@
+<div class="detail-page">
+  <a routerLink="/accounts" class="back">← Back to accounts</a>
+
+  @if (account$ | async; as account) {
+    @if (account === undefined) {
+      <p class="not-found">Account not found.</p>
+    } @else {
+      <div class="detail-card">
+        <div class="detail-header">
+          <div>
+            <h2>{{ account.customerName }}</h2>
+            <p class="meta">{{ account.accountType }} · {{ account.accountNumber }}</p>
+          </div>
+          <span class="badge">{{ account.status }}</span>
+        </div>
+
+        <dl class="grid">
+          <div>
+            <dt>Email</dt>
+            <dd>{{ account.customerEmail }}</dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ account.customerPhone }}</dd>
+          </div>
+          <div>
+            <dt>Open date</dt>
+            <dd>{{ formatDate(account.openDate) }}</dd>
+          </div>
+          <div>
+            <dt>Balance (summary)</dt>
+            <dd class="balance">₹{{ account.balance | number: '1.2-2' }}</dd>
+          </div>
+        </dl>
+
+        <section class="balance-api">
+          <h3>Balance endpoint</h3>
+          <p class="hint">
+            Fetches <code>GET /api/accounts/{{ account.accountNumber }}/balance</code> (same value as summary when the account exists).
+          </p>
+          <div class="balance-row">
+            <button
+              type="button"
+              class="btn"
+              [disabled]="balanceLoading()"
+              (click)="refreshBalance(account.accountNumber)"
+            >
+              {{ balanceLoading() ? 'Loading…' : 'Load balance from API' }}
+            </button>
+            @if (balanceFromEndpoint() !== null) {
+              <span class="balance">₹{{ balanceFromEndpoint()! | number: '1.2-2' }}</span>
+            }
+          </div>
+          @if (balanceError(); as be) {
+            <p class="error">{{ be }}</p>
+          }
+        </section>
+
+        <p class="transfer-note">Transfers are not wired in this UI yet.</p>
+      </div>
+    }
+  } @else {
+    <div class="loading">Loading account…</div>
+  }
+</div>

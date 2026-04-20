@@ -1,9 +1,9 @@
 export interface Account {
-  id: number;
+  id?: number;
   accountNumber: string;
   accountType: string;
   balance: number;
-  openDate: string;
+  openDate?: string | number[];
   status: string;
   customerName: string;
   customerEmail: string;
