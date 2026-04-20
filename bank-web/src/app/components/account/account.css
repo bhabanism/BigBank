@@ -144,6 +144,9 @@
   transition: all 0.2s ease;
   background: #3b82f6;
   color: white;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .action-btn:hover {

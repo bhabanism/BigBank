@@ -28,10 +28,11 @@ public class AccountService {
                 .toList();
     }
 
-    public Double getBalance(String accountNumber) {
+    @Transactional(readOnly = true)
+    public double getBalance(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .map(Account::getBalance)
-                .orElse(0.0);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
     }
 
     @Transactional(readOnly = true)

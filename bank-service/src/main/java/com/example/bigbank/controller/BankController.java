@@ -31,6 +31,11 @@ public class BankController {
         return accountService.findByAccountNumber(accountNumber);
     }
 
+    @GetMapping("/accounts/{accountNumber}/balance")
+    public double getAccountBalance(@PathVariable String accountNumber) {
+        return accountService.getBalance(accountNumber);
+    }
+
     @GetMapping("/customers")
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();

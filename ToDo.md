@@ -31,13 +31,14 @@ Guard admin routes.
 
 
 ** Learning Objectives
-[] DTOs + OpenAPI for account/customer read APIs.
+[] DTOs
 [] Spring Security + roles + JWT (or session).
-[] Angular login, guard, interceptor, role-based menu/routes.
-[] Pagination 
 [] Caching on safe reads + eviction on transfer.
 [] Docker Compose for app + Postgres (+ Redis if you cache).
 [] Split auth vs accounts as two services when Phase 1–4 feel boring.
 [] Micro-frontend last: shell + one small remote for “admin panel.”
 [] Internationalization and Localization
 [] Packaging NPM, Maven
+[] Angular login, guard, interceptor, role-based menu/routes.
+[] OpenAPI for account/customer read APIs.
+[] Pagination 

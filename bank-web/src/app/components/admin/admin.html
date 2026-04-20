@@ -1,0 +1,16 @@
+<div class="admin-page">
+  <h2>Admin</h2>
+  <p class="lead">Calls <code>GET /api/admin/ping</code> (requires <code>ROLE_ADMIN</code>).</p>
+
+  <button type="button" class="btn" [disabled]="loading()" (click)="ping()">
+    {{ loading() ? 'Calling…' : 'Ping admin API' }}
+  </button>
+
+  @if (result(); as r) {
+    <p class="ok">Response: <strong>{{ r }}</strong></p>
+  }
+
+  @if (error(); as e) {
+    <p class="err" role="alert">{{ e }}</p>
+  }
+</div>
