@@ -10,4 +10,6 @@ import com.example.bigbank.entity.Customer;
 @Repository // This annotation tells Spring this is a DAO layer bean
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAll();
+
+    boolean existsByEmailIgnoreCase(String email);
 }
