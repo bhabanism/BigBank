@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
+import { loadRemoteModule } from '@angular-architects/module-federation';
 
 import { authGuard, guestGuard } from './core/auth.guard';
+import { ADMIN_REMOTE_ENTRY } from './remote-config';
 
 export const routes: Routes = [
   {
@@ -29,7 +31,12 @@ export const routes: Routes = [
       },
       {
         path: 'admin',
-        loadComponent: () => import('./components/admin/admin').then((m) => m.Admin),
+        loadChildren: () =>
+          loadRemoteModule({
+            type: 'module',
+            remoteEntry: ADMIN_REMOTE_ENTRY,
+            exposedModule: './Routes',
+          }).then((m) => m.ADMIN_REMOTE_ROUTES),
       },
     ],
   },

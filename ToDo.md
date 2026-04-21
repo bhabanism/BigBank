@@ -1,3 +1,6 @@
+Immediate -
+[] 1-2 demo micro frontend in angular
+
 Next step in detail (recommended order)
 Step 1 — Backend: Spring Security + login (foundation)
 
@@ -31,8 +34,8 @@ Guard admin routes.
 
 
 ** Learning Objectives
-[] DTOs
-[] Spring Security + roles + JWT (or session).
+[x] DTOs
+[x] Spring Security + roles + JWT (or session).
 [] Caching on safe reads + eviction on transfer.
 [] Docker Compose for app + Postgres (+ Redis if you cache).
 [] Split auth vs accounts as two services when Phase 1–4 feel boring.
@@ -42,3 +45,11 @@ Guard admin routes.
 [] Angular login, guard, interceptor, role-based menu/routes.
 [] OpenAPI for account/customer read APIs.
 [] Pagination 
+
+** New and Priority Topics
+- Microservices
+- Redis
+- Spring Cloud
+- Docker & Kubernetes
+- Kafka
+

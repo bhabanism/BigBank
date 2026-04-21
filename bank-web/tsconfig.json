@@ -24,10 +24,13 @@
   "files": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./projects/bank-shell/tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./projects/bank-shell/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bank-admin-mfe/tsconfig.app.json"
     }
   ]
 }
