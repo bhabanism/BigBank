@@ -79,4 +79,13 @@ public class Customer {
     @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Loan> loans = new ArrayList<>();
+
+    /** Application use: construct a new customer row (JPA-only no-args stays protected). */
+    public static Customer newCustomer(String firstName, String lastName, String email) {
+        Customer c = new Customer();
+        c.setFirstName(firstName);
+        c.setLastName(lastName);
+        c.setEmail(email);
+        return c;
+    }
 }

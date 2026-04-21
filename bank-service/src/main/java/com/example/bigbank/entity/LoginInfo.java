@@ -63,4 +63,12 @@ public class LoginInfo {
     @OneToMany(mappedBy = "loginInfo", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = false)
     private List<LoginRole> loginRoles = new ArrayList<>();
 
+    public static LoginInfo newForCustomer(Customer customer, String username, String passwordHash) {
+        LoginInfo login = new LoginInfo();
+        login.setCustomer(customer);
+        login.setUsername(username);
+        login.setPasswordHash(passwordHash);
+        return login;
+    }
+
 }

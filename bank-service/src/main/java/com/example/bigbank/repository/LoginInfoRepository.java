@@ -20,4 +20,6 @@ public interface LoginInfoRepository extends JpaRepository<LoginInfo, Long> {
     WHERE l.username = :username
     """)
     Optional<LoginInfo> findByUsernameWithRoles(@Param("username") String username);
+
+    boolean existsByUsernameIgnoreCase(String username);
 }
