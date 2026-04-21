@@ -1,0 +1,58 @@
+<div class="admin-page">
+  <h2>Admin</h2>
+  <p class="lead">Micro-frontend served from <code>bank-admin-mfe</code> (Module Federation).</p>
+
+  <h3>Register customer</h3>
+  <p class="lead">Calls <code>POST /api/admin/users</code> (requires <code>ROLE_ADMIN</code>).</p>
+
+  <form [formGroup]="registerForm" (ngSubmit)="submitRegister()" class="form-grid">
+    <label class="field field-full">
+      <span>Username</span>
+      <input type="text" formControlName="username" autocomplete="username" />
+    </label>
+    <label class="field field-full">
+      <span>Password</span>
+      <input type="password" formControlName="password" autocomplete="new-password" />
+    </label>
+    <label class="field field-full">
+      <span>Email</span>
+      <input type="email" formControlName="email" autocomplete="email" />
+    </label>
+    <label class="field">
+      <span>First name</span>
+      <input type="text" formControlName="firstName" />
+    </label>
+    <label class="field">
+      <span>Last name</span>
+      <input type="text" formControlName="lastName" />
+    </label>
+    <div class="field-full">
+      <button type="submit" class="btn" [disabled]="registerSubmitting()">
+        {{ registerSubmitting() ? 'Creating…' : 'Create customer login' }}
+      </button>
+    </div>
+  </form>
+
+  @if (registerResult(); as rr) {
+    <p class="ok">Created customer <strong>#{{ rr.customerId }}</strong> with username <strong>{{ rr.username }}</strong>.</p>
+  }
+
+  @if (registerError(); as re) {
+    <p class="err" role="alert">{{ re }}</p>
+  }
+
+  <h3>Admin API check</h3>
+  <p class="lead">Calls <code>GET /api/admin/ping</code> (requires <code>ROLE_ADMIN</code>).</p>
+
+  <button type="button" class="btn btn-secondary" [disabled]="loading()" (click)="ping()">
+    {{ loading() ? 'Calling…' : 'Ping admin API' }}
+  </button>
+
+  @if (result(); as r) {
+    <p class="ok">Response: <strong>{{ r }}</strong></p>
+  }
+
+  @if (error(); as e) {
+    <p class="err" role="alert">{{ e }}</p>
+  }
+</div>
