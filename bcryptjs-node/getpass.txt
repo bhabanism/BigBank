@@ -1,0 +1,1 @@
+node -e "const b=require('bcryptjs'); console.log(b.hashSync(process.argv[1]||'ChangeMe!', 12));" YourPassword
