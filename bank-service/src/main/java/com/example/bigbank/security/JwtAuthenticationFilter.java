@@ -2,6 +2,7 @@ package com.example.bigbank.security;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,16 +38,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = auth.substring(7);
-        String username = jwtService.extractUsername(jwt);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails user = userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwt, user)) {
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        try {
+            if (jwt.isEmpty()) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value());
+                return;
             }
+            String username = jwtService.extractUsername(jwt);
+            
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails user = userDetailsService.loadUserByUsername(username);
+                if (jwtService.isTokenValid(jwt, user)) {
+                    var authToken = new UsernamePasswordAuthenticationToken(
+                            user, null, user.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);            
+                } else {
+                    // Valid parse but failed checks (e.g. user mismatch) — still unauthenticated
+                    response.sendError(HttpStatus.UNAUTHORIZED.value());
+                    return;
+                }
+            }
+        } catch (JwtException e) {
+            // Expired, malformed, bad signature, etc.
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
         }
         filterChain.doFilter(request, response);
     }
