@@ -1,0 +1,51 @@
+package com.example.bankingservice.security;
+
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
+@Service
+public class JwtService {
+
+    @Value("${app.jwt.secret}")
+    private String secret;
+
+    private SecretKey signingKey() {
+        byte[] bytes = Decoders.BASE64.decode(java.util.Base64.getEncoder().encodeToString(secret.getBytes()));
+        return Keys.hmacShaKeyFor(bytes.length >= 32 ? bytes : pad(secret));
+    }
+
+    private static byte[] pad(String s) {
+        byte[] b = s.getBytes();
+        if (b.length >= 32) {
+            return b;
+        }
+        byte[] out = new byte[32];
+        System.arraycopy(b, 0, out, 0, b.length);
+        return out;
+    }
+
+    public String extractUsername(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        return !parseClaims(token).getExpiration().before(new Date());
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(signingKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+}

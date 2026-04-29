@@ -1,0 +1,43 @@
+services:
+  identity-service:
+    build:
+      context: ./identity-service
+    container_name: identity-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/bigbank_identity
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: pg
+      APP_JWT_SECRET: dev-only-change-me-use-64-plus-chars-abcdefghijklmnopqrstuvwxyz0123456789
+      APP_JWT_EXPIRATION_MS: 86400000
+    restart: unless-stopped
+
+  banking-service:
+    build:
+      context: ./banking-service
+    container_name: banking-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/bigbank_banking
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: pg
+      APP_JWT_SECRET: dev-only-change-me-use-64-plus-chars-abcdefghijklmnopqrstuvwxyz0123456789
+    restart: unless-stopped
+    depends_on:
+      - identity-service
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      GATEWAY_ROUTES_IDENTITY: http://identity-service:8082
+      GATEWAY_ROUTES_BANKING: http://banking-service:8083
+    restart: unless-stopped
+    depends_on:
+      - identity-service
+      - banking-service
