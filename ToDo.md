@@ -1,5 +1,7 @@
-Immediate -
-[] 1-2 demo micro frontend in angular
+
+[] Microservices
+
+[x] 1-2 demo micro frontend in angular
 
 Next step in detail (recommended order)
 Step 1 — Backend: Spring Security + login (foundation)
