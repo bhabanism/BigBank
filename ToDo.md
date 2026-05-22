@@ -1,3 +1,14 @@
+Rough build order (no concurrency)
+1 docker-compose: ActiveMQ + interest-service.
+2 interest-service: JPA Account (minimal fields), JMS config, queue name.
+3 DTO InterestAccrualMessage + producer service: load all accounts → send messages.
+4 Consumer @JmsListener: calculate → save.
+5 REST POST /api/interest/accrual/run (+ security).
+6 Gateway route + env vars.
+7 Cache: plan eviction on banking (or accept stale for first test, then fix).
+8 Verify: SQL updates, second GET /api/accounts shows new balances after eviction/TTL.
+
+
 ** New and Priority Topics
 [x] Microservices
 [] Spring Cache
