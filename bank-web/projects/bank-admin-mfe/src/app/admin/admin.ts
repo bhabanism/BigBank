@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { AdminService } from '../services/admin-service';
+import { AccrualRunResponse, AdminService } from '../services/admin-service';
 
 @Component({
   selector: 'app-admin',
@@ -21,6 +21,10 @@ export class Admin {
   protected readonly registerError = signal<string | null>(null);
   protected readonly registerSubmitting = signal(false);
 
+  protected readonly accrualResult = signal<AccrualRunResponse | null>(null);
+  protected readonly accrualError = signal<string | null>(null);
+  protected readonly accrualLoading = signal(false);
+
   readonly registerForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
     password: ['', [Validators.required, Validators.minLength(8)]],
@@ -28,6 +32,38 @@ export class Admin {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
   });
+
+  protected runInterestAccrual(): void {
+    if (
+      !confirm(
+        'Run interest accrual on all Active accounts? Balances will be updated asynchronously.'
+      )
+    ) {
+      return;
+    }
+    this.accrualResult.set(null);
+    this.accrualError.set(null);
+    this.accrualLoading.set(true);
+    this.adminService.runInterestAccrual().subscribe({
+      next: (res) => {
+        this.accrualLoading.set(false);
+        this.accrualResult.set(res);
+      },
+      error: (err) => {
+        this.accrualLoading.set(false);
+        const status = err?.status;
+        if (status === 401) {
+          this.accrualError.set('Not signed in. Log in as admin first.');
+        } else if (status === 403) {
+          this.accrualError.set('Forbidden.');
+        } else {
+          this.accrualError.set(
+            'Accrual failed. Check gateway, banking, interest-service, and ActiveMQ.'
+          );
+        }
+      },
+    });
+  }
 
   protected ping(): void {
     this.result.set(null);

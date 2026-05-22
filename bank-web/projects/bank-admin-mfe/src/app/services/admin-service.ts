@@ -17,11 +17,17 @@ export interface AdminRegisterUserResponse {
   username: string;
 }
 
+export interface AccrualRunResponse {
+  jobId: string;
+  status: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly http = inject(HttpClient);
   private readonly pingUrl = `${API_BASE_URL}/admin/ping`;
   private readonly usersUrl = `${API_BASE_URL}/admin/users`;
+  private readonly accrualRunUrl = `${API_BASE_URL}/accounts/accrual/run`;
 
   ping(): Observable<string> {
     return this.http.get(this.pingUrl, { responseType: 'text' });
@@ -29,5 +35,9 @@ export class AdminService {
 
   registerUser(body: AdminRegisterUserRequest): Observable<AdminRegisterUserResponse> {
     return this.http.post<AdminRegisterUserResponse>(this.usersUrl, body);
+  }
+
+  runInterestAccrual(): Observable<AccrualRunResponse> {
+    return this.http.post<AccrualRunResponse>(this.accrualRunUrl, {});
   }
 }

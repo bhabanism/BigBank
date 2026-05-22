@@ -41,6 +41,32 @@
     <p class="err" role="alert">{{ re }}</p>
   }
 
+  <h3>Interest accrual</h3>
+  <p class="lead">
+    Calls <code>POST /api/accounts/accrual/run</code> — queues interest for all
+    <strong>Active</strong> accounts (async via ActiveMQ).
+  </p>
+
+  <button
+    type="button"
+    class="btn btn-secondary"
+    [disabled]="accrualLoading()"
+    (click)="runInterestAccrual()"
+  >
+    {{ accrualLoading() ? 'Starting…' : 'Run interest on all active accounts' }}
+  </button>
+
+  @if (accrualResult(); as ar) {
+    <p class="ok">
+      Started job <strong>{{ ar.jobId }}</strong> ({{ ar.status }}). Check Accounts after a few
+      seconds.
+    </p>
+  }
+
+  @if (accrualError(); as ae) {
+    <p class="err" role="alert">{{ ae }}</p>
+  }
+
   <h3>Admin API check</h3>
   <p class="lead">Calls <code>GET /api/admin/ping</code> (requires <code>ROLE_ADMIN</code>).</p>
 
