@@ -2,6 +2,7 @@ package com.example.bankingservice.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "customers", key = "'all'")
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }

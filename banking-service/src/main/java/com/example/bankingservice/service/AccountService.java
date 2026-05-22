@@ -2,6 +2,7 @@ package com.example.bankingservice.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "accounts", key = "'all'")
     public List<AccountSummaryResponse> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll(Sort.by("accountNumber"));
         return accounts.stream().map(this::getAccountSummary).toList();
