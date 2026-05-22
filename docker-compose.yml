@@ -24,9 +24,11 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: pg
       APP_JWT_SECRET: dev-only-change-me-use-64-plus-chars-abcdefghijklmnopqrstuvwxyz0123456789
+      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
+      APP_INTERNAL_API_KEY: dev-internal-key-change-me      
     restart: unless-stopped
     depends_on:
-      - identity-service
+      - activemq
 
   activemq:
     image: apache/activemq-classic:6.1.4
@@ -46,14 +48,15 @@ services:
     ports:
       - "8084:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/bigbankdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: pg
       SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
       SPRING_ACTIVEMQ_USER: admin
       SPRING_ACTIVEMQ_PASSWORD: admin
+      BANKING_SERVICE_BASE_URL: http://banking-service:8083
+      APP_BANKING_BASE_URL: http://banking-service:8083
+      APP_INTERNAL_API_KEY: dev-internal-key-change-me
     depends_on:
       - activemq
+      - banking-service
     restart: unless-stopped
 
   api-gateway:

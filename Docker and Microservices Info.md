@@ -10,3 +10,5 @@ Identity: http://localhost:8082/actuator/health
 Banking: http://localhost:8083/actuator/health
 Interest: http://localhost:8084/actuator/health
 ActiveMQ console: http://localhost:8161
+Start accrual: POST http://localhost:8080/api/accounts/accrual/run (JWT)
+Internal banking: PATCH .../api/internal/accounts/{n}/interest (X-Internal-Api-Key)
