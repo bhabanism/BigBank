@@ -19,7 +19,6 @@ public class BankingAccountClient {
         var body = Map.of("jobId", jobId, "interestAmount", interestAmount);
         bankingRestClient.patch()
                 .uri("/api/internal/accounts/{accountNumber}/interest", accountNumber)
-                .header("X-Internal-Api-Key", "${app.internal.api-key}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(body)
                 .retrieve()
